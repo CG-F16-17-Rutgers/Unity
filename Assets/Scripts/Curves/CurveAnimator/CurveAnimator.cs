@@ -4,7 +4,7 @@ using System.Collections;
 public class CurveAnimator : MonoBehaviour {
 
     Transform t;
-    Quaternion q;
+    //Quaternion q;
     public int FrameRate = 30;
 
     float lastFrame = 0;
@@ -15,7 +15,7 @@ public class CurveAnimator : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         t = this.transform;
-        q = t.rotation;
+        //q = t.rotation;
         if (curve != null) {
             curve.ResetCurve();
             t.position = curve.GetCurvePoint();
