@@ -55,9 +55,7 @@ public class goblinAnimator : MonoBehaviour {
 		if (agent.isOnOffMeshLink) {
 			if (!traversingLink) {
 				Debug.Log ("Should start jump now");
-				//agent.Stop ();
-				anim.SetBool ("Moving", false);
-				anim.Play ("Idle");
+				agent.Stop ();
 				anim.Play ("Idle Jump");
 				currLink = agent.currentOffMeshLinkData;
 				traversingLink = true;
@@ -68,11 +66,11 @@ public class goblinAnimator : MonoBehaviour {
 			newPosition.y += 2f * Mathf.Sin (Mathf.PI * tlerp);
 			transform.position = newPosition;
 
-			if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Idle Jump")) {
+			if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle Jump")) {
+				Debug.Log ("should be at other side of navMesh");
 				transform.position = currLink.endPos;
 				traversingLink = false;
 				agent.CompleteOffMeshLink();
-				anim.SetBool ("Moving", shouldMove);
 				agent.Resume();
 			}
 			/*anim.SetBool("Moving", false);
@@ -82,6 +80,7 @@ public class goblinAnimator : MonoBehaviour {
 				Debug.Log("should jump here!");
 				anim.SetTrigger("Jump");
 			}
+			//this was being called more than twice on a single offMeshLink crossing. 
 			jumpNbr += 1;
 			anim.SetBool("Moving", true);
 			agent.Resume ();*/
