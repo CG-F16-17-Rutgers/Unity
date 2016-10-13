@@ -11,6 +11,7 @@ public class GoblinMove : MonoBehaviour {
     public static int selectedTotal = 0;
     private Ray shootRay;
     bool isSelected;
+    bool hasMoved;
     public void stop()
     {
         agent.Stop();
@@ -28,16 +29,25 @@ public class GoblinMove : MonoBehaviour {
     {
         agent = GetComponent<NavMeshAgent>();
         obs = GetComponent<NavMeshObstacle>();
-
-        target = gameObject.transform.position;
+        hasMoved = false;
     }
 
 	// Update is called once per frame
 	void Update () {
+        if (!hasMoved)
+        {
+            target = new Vector3(-12.8f,-1.0f, 1f);
+            isArrived = false;
+            agent.enabled = true;
+            obs.enabled = true;
+            Debug.Log(target);
+            agent.SetDestination(target);
+            hasMoved = true;
+        }
         if (Vector3.Distance(transform.position, target) < 2.0f)
         {
-            //agent.enabled = false;
-            //obs.enabled = true;
+            agent.enabled = false;
+            obs.enabled = true;
         }
         else
         {
@@ -47,8 +57,8 @@ public class GoblinMove : MonoBehaviour {
 	}
     public void isNowSelected()
     {
-        //Renderer rend = GetComponent<Renderer>();
-        //rend.material.color = Color.blue;
+        SkinnedMeshRenderer rend = this.gameObject.transform.GetChild(1).GetComponent<SkinnedMeshRenderer>();
+        rend.material.shader = Shader.Find("Sprites/Diffuse");
         isSelected = true;
         selectedTotal += 1;
         Debug.Log (selectedTotal);
@@ -57,8 +67,8 @@ public class GoblinMove : MonoBehaviour {
     //used by director to toggle the agent being selected off
     public void isNowNotSelected()
     {
-        //Renderer rend = GetComponent<Renderer>();
-        //rend.material.color = Color.white;
+        SkinnedMeshRenderer rend = this.gameObject.transform.GetChild(1).GetComponent<SkinnedMeshRenderer>();
+        rend.material.shader = Shader.Find("Standard");
         isSelected = false;
         selectedTotal -= 1;
     }
@@ -70,11 +80,13 @@ public class GoblinMove : MonoBehaviour {
     //used by Director to set the location of travel
     public void setTarget(RaycastHit givenHit)
     {
+        
         target = givenHit.point;
-
+    
         isArrived = false;
         agent.enabled = true;
         obs.enabled = false;
+        Debug.Log(target);
         agent.SetDestination(target);
 
     }

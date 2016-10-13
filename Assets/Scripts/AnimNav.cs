@@ -13,9 +13,10 @@ public class AnimNav : MonoBehaviour {
         agent = GetComponent<NavMeshAgent>();   
         agent.updatePosition = false;
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update()
+    {
         Vector3 worldDeltaPosition = agent.nextPosition - transform.position;
 
         // Map 'worldDeltaPosition' to local space
@@ -30,14 +31,14 @@ public class AnimNav : MonoBehaviour {
         // Update velocity if time advances
         if (Time.deltaTime > 1e-5f)
             velocity = smoothDeltaPosition / Time.deltaTime;
-
-        bool shouldMove = velocity.magnitude > 0.5f && agent.remainingDistance > agent.radius;
-
+        if (agent.enabled && agent.isActiveAndEnabled)
+        {
+            bool shouldMove = velocity.magnitude > 0.5f && agent.remainingDistance > 2.0f;
         // Update animation parameters
         anim.SetBool("move", shouldMove);
         anim.SetFloat("velX", velocity.x);
         anim.SetFloat("velY", velocity.y);
-
+        }
     }
 
     void OnAnimatorMove()
