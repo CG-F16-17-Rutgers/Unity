@@ -52,14 +52,16 @@ public class goblinAnimator : MonoBehaviour {
 		// get the off-mesh link, will trigger the jump animation
 		// every time it will go through 2 mesh, so use a number to count
 		if (agent.isOnOffMeshLink) {
-			//agent.Stop ();
+			anim.SetBool("Moving", false);
+			agent.Stop();
 			if (jumpNbr % 2 == 0)
 			{
 				Debug.Log("should jump here!");
 				anim.SetTrigger("Jump");
 			}
 			jumpNbr += 1;
-			//agent.Resume ();
+			anim.SetBool("Moving", true);
+			agent.Resume ();
 		}
 	}
 
