@@ -24,18 +24,12 @@ public class MouseCharacterController : MonoBehaviour {
 			bool hit = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo);
 			if (hit) 
 			{
-				Debug.Log("Hit " + hitInfo.transform.gameObject.name);
 				if (hitInfo.transform.gameObject.tag == "Goblin")
 				{
 					Debug.Log ("Goblin selected!");
 					isSelected = true;
-				} else {
-					Debug.Log ("de selected!");
-                    isSelected = false;
-				}
-			} else {
-				Debug.Log("No hit");
-			}
+				} 
+			} 
 		}
 
         // monitor the mouse activity, left click to set a target
@@ -53,5 +47,9 @@ public class MouseCharacterController : MonoBehaviour {
                 }
             }
         }
+
+		if (Input.GetKey(KeyCode.Delete)) {
+			isSelected = false;
+		}
     }
 }

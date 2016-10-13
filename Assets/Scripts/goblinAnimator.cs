@@ -40,8 +40,6 @@ public class goblinAnimator : MonoBehaviour {
 		anim.SetFloat ("xForce", velocity.x);
 		anim.SetFloat ("zForce", velocity.y);
 
-		//GetComponent<LookAt>().lookAtTargetPosition = agent.steeringTarget + transform.forward;
-
 		if (Input.GetKey(KeyCode.LeftShift))
 		{
 			anim.SetBool("run", true);
@@ -54,12 +52,14 @@ public class goblinAnimator : MonoBehaviour {
 		// get the off-mesh link, will trigger the jump animation
 		// every time it will go through 2 mesh, so use a number to count
 		if (agent.isOnOffMeshLink) {
+			//agent.Stop ();
 			if (jumpNbr % 2 == 0)
 			{
 				Debug.Log("should jump here!");
 				anim.SetTrigger("Jump");
 			}
 			jumpNbr += 1;
+			//agent.Resume ();
 		}
 	}
 
