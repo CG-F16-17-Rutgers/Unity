@@ -4,7 +4,8 @@ using System.Collections;
 public class goblinAnimator : MonoBehaviour {
 	Animator anim;
 	NavMeshAgent agent;
-	int jumpNbr = 0;
+	bool traversingLink = false;
+	OffMeshLinkData currLink;
 	Vector2 smoothDeltaPosition = Vector2.zero;
 	Vector2 velocity = Vector2.zero;
 
@@ -40,8 +41,6 @@ public class goblinAnimator : MonoBehaviour {
 		anim.SetFloat ("xForce", velocity.x);
 		anim.SetFloat ("zForce", velocity.y);
 
-		//GetComponent<LookAt>().lookAtTargetPosition = agent.steeringTarget + transform.forward;
-
 		if (Input.GetKey(KeyCode.LeftShift))
 		{
 			anim.SetBool("run", true);
@@ -54,12 +53,37 @@ public class goblinAnimator : MonoBehaviour {
 		// get the off-mesh link, will trigger the jump animation
 		// every time it will go through 2 mesh, so use a number to count
 		if (agent.isOnOffMeshLink) {
+			if (!traversingLink) {
+				Debug.Log ("Should start jump now");
+				agent.Stop ();
+				anim.Play ("Idle Jump");
+				currLink = agent.currentOffMeshLinkData;
+				traversingLink = true;
+			}
+
+			var tlerp = anim.GetCurrentAnimatorStateInfo (0).normalizedTime;
+			var newPosition = Vector3.Lerp (currLink.startPos, currLink.endPos, tlerp);
+			newPosition.y += 2f * Mathf.Sin (Mathf.PI * tlerp);
+			transform.position = newPosition;
+
+			if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle Jump")) {
+				Debug.Log ("should be at other side of navMesh");
+				transform.position = currLink.endPos;
+				traversingLink = false;
+				agent.CompleteOffMeshLink();
+				agent.Resume();
+			}
+			/*anim.SetBool("Moving", false);
+			agent.Stop();
 			if (jumpNbr % 2 == 0)
 			{
 				Debug.Log("should jump here!");
 				anim.SetTrigger("Jump");
 			}
+			//this was being called more than twice on a single offMeshLink crossing. 
 			jumpNbr += 1;
+			anim.SetBool("Moving", true);
+			agent.Resume ();*/
 		}
 	}
 
