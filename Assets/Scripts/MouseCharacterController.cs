@@ -6,11 +6,17 @@ public class MouseCharacterController : MonoBehaviour {
 	bool isSelected;
     Vector3 target;
     NavMeshAgent navAgent;
+    TextMesh textMesh;
+
     // Use this for initialization
     void Start () {
 
 		isSelected = false;
         navAgent = GetComponent<NavMeshAgent>();
+
+        textMesh = GetComponent<TextMesh>();
+
+        textMesh.text = "";
 	}
 	
 	// Update is called once per frame
@@ -28,11 +34,15 @@ public class MouseCharacterController : MonoBehaviour {
                 {
                     Debug.Log("Goblin selected!");
                     isSelected = true;
+                    textMesh.text = "S";
+
                 }
                 else {
                     isSelected = false;
+                    textMesh.text = "";
+
                 }
-			} 
+            } 
 		}
 
         // monitor the mouse activity, left click to set a target
