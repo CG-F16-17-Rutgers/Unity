@@ -24,11 +24,14 @@ public class MouseCharacterController : MonoBehaviour {
 			bool hit = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo);
 			if (hit) 
 			{
-				if (hitInfo.transform.gameObject.tag == "Goblin")
-				{
-					Debug.Log ("Goblin selected!");
-					isSelected = true;
-				} 
+                if (hitInfo.transform.gameObject.tag == "Goblin")
+                {
+                    Debug.Log("Goblin selected!");
+                    isSelected = true;
+                }
+                else {
+                    isSelected = false;
+                }
 			} 
 		}
 

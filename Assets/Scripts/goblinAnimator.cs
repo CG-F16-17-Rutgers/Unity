@@ -12,6 +12,9 @@ public class goblinAnimator : MonoBehaviour {
 
     Vector2 smoothDeltaPosition = Vector2.zero;
 	Vector2 velocity = Vector2.zero;
+    Vector2 runVelocity = Vector2.zero;
+
+    bool isRunning = false;
 
 	void Start ()
 	{
@@ -43,18 +46,22 @@ public class goblinAnimator : MonoBehaviour {
 
 		bool shouldMove = velocity.magnitude > 0.5f && agent.remainingDistance > agent.radius;
 
-		// Update animation parameters
-		anim.SetBool("Moving", shouldMove);
-		anim.SetFloat ("xForce", velocity.x);
-		anim.SetFloat ("zForce", velocity.y);
+        runVelocity = velocity * 5;
 
-		if (Input.GetKey(KeyCode.LeftShift))
+        // Update animation parameters
+        anim.SetBool("Moving", shouldMove);
+        anim.SetFloat("xForce", velocity.x);
+        anim.SetFloat("zForce", velocity.y);
+
+        if (Input.GetKey(KeyCode.LeftShift))
 		{
-			anim.SetBool("run", true);
+            isRunning = true;
+            anim.SetBool("run", true);
 		}
 		else
 		{
-			anim.SetBool("run", false);
+            isRunning = false;
+            anim.SetBool("run", false);
 		}
 
         if (Input.GetKey(KeyCode.Space)) {
@@ -115,7 +122,15 @@ public class goblinAnimator : MonoBehaviour {
         else {
             if (!traversingLink)
             {
-                transform.position = agent.nextPosition;
+                if (isRunning)
+                {
+                    agent.speed = 8;
+                }
+                else {
+                    agent.speed = 3.5f;
+                }
+                transform.position = agent.nextPosition; 
+                         
             }
 
         }
