@@ -63,6 +63,7 @@ public class MouseCharacterController : MonoBehaviour {
 
 		if (Input.GetKey(KeyCode.Delete)) {
 			isSelected = false;
+			textMesh.text = "";
 		}
     }
 }
